@@ -26,7 +26,7 @@ public class CurrencyController {
     @PostMapping("api/conversion")
     public double conversion(@RequestParam("from") String from,
                              @RequestParam("to") String to,
-                             @RequestParam("amount") long amount) {
+                             @RequestParam("amount") double amount) {
         // Check whether the Currency is in the DB
         if (currencyService.existByName(from) && currencyService.existByName(to)) {
             double exchangeRate = currencyService.findByName(from).getExchangeValue() / currencyService.findByName(to).getExchangeValue();
