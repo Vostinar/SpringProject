@@ -28,7 +28,7 @@ public class CurrencyController {
                              @RequestParam("to") String to,
                              @RequestParam("amount") long amount) {
         // Check whether the Currency is in the DB
-        if (currencyService.ExistByName(from) && currencyService.ExistByName(to)) {
+        if (currencyService.existByName(from) && currencyService.existByName(to)) {
             double exchangeRate = currencyService.findByName(from).getExchangeValue() / currencyService.findByName(to).getExchangeValue();
             return (amount / exchangeRate);
         }

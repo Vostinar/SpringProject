@@ -48,9 +48,11 @@ public class CurrencyRepositoryTest {
         String name = "USD";
         testRepository.findByName(name);
         // when
-        Currency exists = testRepository.findByName(name);
+        Currency foundCurrency = testRepository.findByName(name);
+        System.out.println("foundCurrency is: " + foundCurrency.getName());
         // then
-        assertThat(exists).isNotNull();
+        assertThat(foundCurrency).isNotNull();
+        assertThat(foundCurrency.getName()).isEqualTo(name);
         System.out.println("Repo testing findByName finished");
     }
 }

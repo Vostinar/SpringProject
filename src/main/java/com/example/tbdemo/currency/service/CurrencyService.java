@@ -24,7 +24,7 @@ public class CurrencyService {
         return currencyRepository.findByName(name);
     }
 
-    public boolean ExistByName(String name) {
+    public boolean existByName(String name) {
         return currencyRepository.existsByName(name);
     }
 }
