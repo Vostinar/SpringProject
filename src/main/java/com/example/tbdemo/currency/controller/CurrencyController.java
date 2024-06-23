@@ -32,6 +32,6 @@ public class CurrencyController {
             double exchangeRate = currencyService.findByName(from).getExchangeValue() / currencyService.findByName(to).getExchangeValue();
             return (amount / exchangeRate);
         }
-        return 0; // Possibility to use Error msg that Currency is not in DB
+        return 0; // Ex Bad Request
     }
 }
