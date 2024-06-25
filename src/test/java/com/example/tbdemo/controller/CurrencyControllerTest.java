@@ -4,6 +4,7 @@ import com.example.tbdemo.currency.controller.CurrencyController;
 import com.example.tbdemo.currency.model.Currency;
 import com.example.tbdemo.currency.service.CurrencyService;
 import com.google.gson.Gson;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,13 +38,8 @@ public class CurrencyControllerTest {
         Currency from = new Currency("USD", 1.0749);
         Currency to = new Currency("CZK", 24.91);
         double amount = 100;
-        given(currencyService.existByName(from.getName())).willReturn(true);
-        given(currencyService.existByName(to.getName())).willReturn(true);
-        given(currencyService.findByName(from.getName())).willReturn(from);
-        given(currencyService.findByName(to.getName())).willReturn(to);
-
-        double expectedConversionResult = amount / (from.getExchangeValue() / to.getExchangeValue());
-
+        double expectedConversionResult = 2317.4248767327194;
+        given(currencyService.calcConversion(from.getName(), to.getName(), amount)).willReturn(expectedConversionResult);
         mockMvc.perform(post("/api/conversion")
                         .param("from", "USD")
                         .param("to", to.getName())

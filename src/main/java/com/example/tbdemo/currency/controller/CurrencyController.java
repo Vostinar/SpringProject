@@ -27,11 +27,6 @@ public class CurrencyController {
     public double conversion(@RequestParam("from") String from,
                              @RequestParam("to") String to,
                              @RequestParam("amount") double amount) {
-        // Check whether the Currency is in the DB
-        if (currencyService.existByName(from) && currencyService.existByName(to)) {
-            double exchangeRate = currencyService.findByName(from).getExchangeValue() / currencyService.findByName(to).getExchangeValue();
-            return (amount / exchangeRate);
-        }
-        return 0; // Ex Bad Request
+        return currencyService.calcConversion(from, to, amount);
     }
 }

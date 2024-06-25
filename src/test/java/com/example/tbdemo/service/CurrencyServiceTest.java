@@ -4,11 +4,14 @@ import com.example.tbdemo.currency.model.Currency;
 import com.example.tbdemo.currency.repository.CurrencyRepository;
 import com.example.tbdemo.currency.service.CurrencyService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,31 +51,35 @@ public class CurrencyServiceTest {
     }
 
     @Test
-    void testFindByName() {
-        System.out.println("Service testing findByName for JPY");
+    void testCalcConversionCurrencyNotFound() {
+        System.out.println("Service testing testCalcConversionCurrencyNotFound");
         // given
-        String name = "JPY";
-        Currency jpyCurrency = new Currency("JPY", 110.0);
-        when(currencyRepository.findByName(name)).thenReturn(jpyCurrency);
+        when(currencyRepository.existsByName("USD")).thenReturn(false);
         // when
-        Currency currency = testCurrencyService.findByName(name);
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            testCurrencyService.calcConversion("USD", "EUR", 100);
+        });
         // then
-        assertNotNull(currency);
-        assertEquals(name, currency.getName(), "Name must match");
-        assertEquals(110.0, currency.getExchangeValue(), "Currency exchange value must match");
-        System.out.println("Service testing findByName finished");
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertEquals("404 NOT_FOUND \"Ex currency USD not found in DB\"", exception.getMessage());
+        System.out.println("Service testing testCalcConversionCurrencyNotFound finished");
     }
 
     @Test
-    void testExistByName() {
-        System.out.println("Service testing testExistByName for CZK");
+    void calcConversion() {
+        System.out.println("Service testing calcConversion for JPY to USD");
         // given
-        String name = "CZK";
-        when(currencyRepository.existsByName(name)).thenReturn(true);
+        double amount = 100;
+        Currency jpyCurrency = new Currency("JPY", 169.78);
+        Currency usdCurrency = new Currency("USD", 1.0749);
+        when(currencyRepository.existsByName(jpyCurrency.getName())).thenReturn(true);
+        when(currencyRepository.existsByName(usdCurrency.getName())).thenReturn(true);
+        when(currencyRepository.findByName(jpyCurrency.getName())).thenReturn(jpyCurrency);
+        when(currencyRepository.findByName(usdCurrency.getName())).thenReturn(usdCurrency);
         // when
-        boolean exists = testCurrencyService.existByName(name);
+        double result = testCurrencyService.calcConversion(jpyCurrency.getName(), usdCurrency.getName(), amount);
         // then
-        assertTrue(exists, "Currency must exist");
-        System.out.println("Service testing testExistByName finished");
+        assertEquals(result, 0.6331134409235482, "Conversion result mismatch");
+        System.out.println("Service testing findByName finished");
     }
 }
