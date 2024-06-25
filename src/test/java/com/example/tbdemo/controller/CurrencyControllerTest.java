@@ -4,7 +4,6 @@ import com.example.tbdemo.currency.controller.CurrencyController;
 import com.example.tbdemo.currency.model.Currency;
 import com.example.tbdemo.currency.service.CurrencyService;
 import com.google.gson.Gson;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
